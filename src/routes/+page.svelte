@@ -11,8 +11,8 @@
 
   const addTimer = (x?: number, y?: number) => {
     timers = [...timers, {
-      remainingTime: writable(500000),
-      setTime: writable(500000),
+      remainingTime: writable(300000),
+      setTime: writable(300000),
       title: writable(`Timer ${timers.length + 1}`)
     }];
   };

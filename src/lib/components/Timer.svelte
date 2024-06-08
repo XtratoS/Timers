@@ -23,7 +23,7 @@
   let outerContainer: HTMLDivElement;
   let previousTime = Date.now();
   let currentTime = Date.now();
-  let interval: number;
+  let interval: NodeJS.Timeout | number = NaN;
 
   onMount(() => {
     console.log(target);

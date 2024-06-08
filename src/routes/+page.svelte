@@ -37,7 +37,9 @@
     bind:contextMenuX
     bind:contextMenuY
     menuItems={[
-      { label: "Add Timer", action: addTimer }
+      { label: "Add Timer", action: addTimer },
+      { label: "Clear Timers", action: () => timers.set([]) },
+      { label: "Close", action: () => showContextMenu = false, style: "color: #FF474C;"}
     ]}
   />
 {/if}

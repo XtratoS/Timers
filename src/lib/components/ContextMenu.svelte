@@ -5,13 +5,13 @@
 
   export let contextMenuX = 0;
   export let contextMenuY = 0;
-  export let menuItems: { label: string; action: () => void }[] = [];
+  export let menuItems: { label: string; action: () => void, style?: string }[] = [];
 
 </script>
 
 <menu style="top: {contextMenuY}px; left: {contextMenuX}px;">
-  {#each menuItems as { label, action }}
-    <button on:click={action}>{label}</button>
+  {#each menuItems as { label, action, style }}
+    <button {style} on:click={action}>{label}</button>
   {/each}
   <slot />
 </menu>

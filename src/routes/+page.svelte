@@ -1,7 +1,7 @@
 <script lang="ts">
   import ContextMenu from '$lib/components/ContextMenu.svelte';
   import Timer from "$lib/components/Timer.svelte";
-  import { writable } from "svelte/store";
+  import { get, writable } from "svelte/store";
   import type { TTimer } from "../ambient";
   import { setContext } from 'svelte';
   import { v4 } from 'uuid';
@@ -20,15 +20,23 @@
   let contextMenuY = 0;
 
   const addTimer = (x?: number, y?: number) => {
-    timers = [...timers, {
-      remainingTime: writable(300000),
-      setTime: writable(300000),
-      title: writable(`Timer ${timers.length + 1}`)
-    }];
+    timers.update((timers_) => {
+      let nextTimerTitleIndex = 1;
+      while(timers_.find(timer => get(timer.title) === `Timer ${nextTimerTitleIndex}`)) {
+        nextTimerTitleIndex++;
+      }
+      timers_.push({
+        id: 'd' + v4(),
+        remainingTime: writable(300000),
+        setTime: writable(300000),
+        title: writable("Timer " + nextTimerTitleIndex)
+      });
+      return timers_;
+    });
   };
 </script>
 
-<svelte:document on:contextmenu|preventDefault={(ev) => {
+<svelte:window on:contextmenu|preventDefault={(ev) => {
   showContextMenu = true;
   contextMenuX = ev.clientX;
   contextMenuY = ev.clientY;

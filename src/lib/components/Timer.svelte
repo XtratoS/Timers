@@ -1,24 +1,25 @@
 <script lang="ts">
-  import { onMount, setContext } from "svelte";
+  import { getContext, onMount, setContext } from "svelte";
   import Moveable from "./Moveable.svelte";
   import Pause from "./Icons/Pause.svelte";
   import Play from "./Icons/Play.svelte";
   import Reset from "./Icons/Reset.svelte";
   import Modal from "./EditTimerModal.svelte";
-  import { get, writable, type Writable } from "svelte/store";
+  import { get, type Writable } from "svelte/store";
   import { displayTime } from "$lib/utils";
   import Edit from "./Icons/Edit.svelte";
-  import { v4 } from "uuid";
+  import type { TTimer } from "../../ambient";
 
   export let remainingTime: Writable<number>;
   export let setTime: Writable<number>;
   export let title: Writable<string>;
+  export let id: string;
 
   setContext("remainingTime", remainingTime);
   setContext("setTime", setTime);
   setContext("title", title);
-
-  let dialogId = 'd' + v4();
+  
+  let timerStore = getContext<Writable<TTimer[]>>("timers");
   let target: HTMLDivElement;
   let outerContainer: HTMLDivElement;
   let previousTime = Date.now();
@@ -67,7 +68,7 @@
     if (interval) {
       pauseTimer();
     }
-    const dialog: HTMLDialogElement = document.querySelector(`#${dialogId}`)!;
+    const dialog: HTMLDialogElement = document.querySelector(`#${id}`)!;
     dialog.showModal();
   }
 
@@ -79,6 +80,10 @@
   const destroy = () => {
     clearInterval(interval);
     outerContainer.remove();
+    // remove the timer from the timers context
+    timerStore.update((timers) => {
+      return timers.filter((timer) => timer.id !== id);
+    });
   }
 </script>
 
@@ -115,7 +120,7 @@
 
   <Modal
     {destroy}
-    {dialogId}
+    dialogId={id}
   />
 </div>
 

@@ -3,8 +3,18 @@
   import Timer from "$lib/components/Timer.svelte";
   import { writable } from "svelte/store";
   import type { TTimer } from "../ambient";
+  import { setContext } from 'svelte';
+  import { v4 } from 'uuid';
 
-  let timers: TTimer[] = [];
+  let timers = writable<TTimer[]>([{
+    id: 'd' + v4(),
+    remainingTime: writable(300000),
+    setTime: writable(300000),
+    title: writable("Timer 1")
+  }]);
+
+  setContext("timers", timers);
+
   let showContextMenu = false;
   let contextMenuX = 0;
   let contextMenuY = 0;
@@ -24,8 +34,9 @@
   contextMenuY = ev.clientY;
 }} on:click|preventDefault={() => showContextMenu = false} />
 
-{#each timers as timer}
+{#each $timers as timer (timer.id)}
   <Timer
+    id={timer.id}
     bind:remainingTime={timer.remainingTime}
     bind:setTime={timer.setTime}
     bind:title={timer.title}

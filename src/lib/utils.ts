@@ -32,6 +32,14 @@ export class DisplayTime {
     this.hours = Math.floor(time / 3600000);
     this.minutes = Math.floor((time % 3600000) / 60000);
     this.seconds = Math.ceil((time % 60000) / 1000);
+    if (this.seconds === 60) {
+      this.seconds = 0;
+      this.minutes++;
+    }
+    if (this.minutes === 60) {
+      this.minutes = 0;
+      this.hours++;
+    }
     this.updateTimeStrings();
   }
 

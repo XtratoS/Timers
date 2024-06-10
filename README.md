@@ -1,3 +1,2 @@
-# Known Bugs
-
-Timer breaks when it's set out of bound (any value above 59)
+# Timers
+A timers application that imitates the windows clock application, with the ability to rearrance and resize timers
